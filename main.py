@@ -2,8 +2,8 @@ import os
 from dotenv import load_dotenv
 import aiogram as ai
 import asyncio
-from hendlers.hendlers_task import router as tasks_router
-
+from hendlers.hendlers_task_to_time import router as tasks_router
+from hendlers.hendlers_add_task import router as add_tasks_router
 
 load_dotenv()
 
@@ -14,7 +14,7 @@ TOKEN = os.getenv("TOKEN")
 dp = ai.Dispatcher()
 
 dp.include_router(tasks_router)
-
+dp.include_router(add_tasks_router)
 
 
 async def main():
