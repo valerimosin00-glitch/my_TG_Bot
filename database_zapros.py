@@ -57,7 +57,8 @@ def show_task_custom_date(user_id, date_start, date_stop):
     due_datetime TEXT,
     status TEXT DEFAULT 0,
     postponed_count INTEGER DEFAULT 0,
-    created_at TEXT)"""
+    created_at TEXT
+    completed_at TEXT)"""
 
 def add_tasks(user_id, task, due_datetime, created_at):
     conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
@@ -73,3 +74,71 @@ def add_tasks(user_id, task, due_datetime, created_at):
     conn.close()
 
     return "Запись добавлена"
+
+
+def update_text_task(task, task_id):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor()    
+
+    cur.execute("""
+        UPDATE tasks
+        SET task = ?
+        WHERE task_id = ?""", (task, task_id))
+    conn.commit()
+    conn.close()
+    
+def update_date_task(task_id, date):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor() 
+
+    cur.execute("""
+        UPDATE tasks
+        SET due_datetime = ?
+        WHERE task_id = ?""", (date, task_id))
+
+    conn.commit()
+    conn.close()    
+
+def update_status_task(task_id):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor() 
+
+    date = datetime.today()
+    date = str(date.date())
+
+    cur.execute("""
+        UPDATE tasks
+        SET status = 1, completed_at = ?
+        WHERE task_id = ?""", (date,task_id))
+
+    conn.commit()
+    conn.close()    
+
+
+def delete_task(task_id):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor() 
+
+    cur.execute("""
+        DELETE FROM tasks
+        WHERE task_id = ?""", (task_id,))
+
+    conn.commit()
+    conn.close()  
+
+
+def show_tasks_complit(user_id):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor() 
+
+    result = cur.execute("""
+        SELECT task_id, task, due_datetime, completed_at
+        FROM tasks
+        WHERE user_id = ? and status = 1
+        ORDER BY completed_at DESC
+        """, (user_id,))
+    result = result.fetchall()
+    conn.close()  
+    return result
+
+

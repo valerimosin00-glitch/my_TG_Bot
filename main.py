@@ -4,6 +4,7 @@ import aiogram as ai
 import asyncio
 from hendlers.hendlers_task_to_time import router as tasks_router
 from hendlers.hendlers_add_task import router as add_tasks_router
+from hendlers.hendlers_task_actions import router as task_actions_router
 
 load_dotenv()
 
@@ -15,6 +16,7 @@ dp = ai.Dispatcher()
 
 dp.include_router(tasks_router)
 dp.include_router(add_tasks_router)
+dp.include_router(task_actions_router)
 
 
 async def main():

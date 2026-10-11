@@ -18,7 +18,8 @@ keyboard_task = ai.types.InlineKeyboardMarkup(
 # Инлайн клавиатура для задач ко времени
 keyboard_task_to_time = ai.types.InlineKeyboardMarkup(
     inline_keyboard= [[ai.types.InlineKeyboardButton(text="Просмотр задач", callback_data="show_task")],
-                [ai.types.InlineKeyboardButton(text="Добавить новую задачу", callback_data="add_task")]]
+                [ai.types.InlineKeyboardButton(text="Добавить новую задачу", callback_data="add_task")],
+                [ai.types.InlineKeyboardButton(text="Просмотр выполненных задач", callback_data="show_task_compl")]]
 )
 
 # Кнопки для просмотра задач ко времени
@@ -59,7 +60,7 @@ def creat_keyboard_date():
     date, date_call = creat_date()
     # кнопки с датами для добавления задачи
     keyboard_date = ai.types.InlineKeyboardMarkup(
-        inline_keyboard=[[ai.types.InlineKeyboardButton(text = date["date1"], callback_data=date_call["date1"]),ai.types.InlineKeyboardButton(text = date["date2"], callback_data=date["date2"]),
+        inline_keyboard=[[ai.types.InlineKeyboardButton(text = date["date1"], callback_data=date_call["date1"]),ai.types.InlineKeyboardButton(text = date["date2"], callback_data=date_call["date2"]),
                ai.types.InlineKeyboardButton(text = date["date3"], callback_data=date_call["date3"]),ai.types.InlineKeyboardButton(text = date["date4"], callback_data=date_call["date4"])],
                [ai.types.InlineKeyboardButton(text = date["date5"], callback_data=date_call["date5"]),ai.types.InlineKeyboardButton(text = date["date6"], callback_data=date_call["date6"]),
                ai.types.InlineKeyboardButton(text = date["date7"], callback_data=date_call["date7"]),ai.types.InlineKeyboardButton(text = date["date8"], callback_data=date_call["date8"])],
@@ -80,4 +81,13 @@ keyboard_time = ai.types.InlineKeyboardMarkup(
                      [ai.types.InlineKeyboardButton(text="18:00", callback_data="18:00"),ai.types.InlineKeyboardButton(text="19:00", callback_data="19:00"),ai.types.InlineKeyboardButton(text="20:00", callback_data="20:00")],
                      [ai.types.InlineKeyboardButton(text="21:00", callback_data="21:00"),ai.types.InlineKeyboardButton(text="22:00", callback_data="22:00"),ai.types.InlineKeyboardButton(text="23:00", callback_data="23:00")]
                      ]
+)
+
+# Кнопки с действиями над задачами
+keyboard_task_actions = ai.types.InlineKeyboardMarkup(
+    inline_keyboard=[[ai.types.InlineKeyboardButton(text="Редактировать задачу", callback_data="update_task"),
+                      ai.types.InlineKeyboardButton(text="Редактировать дату", callback_data="update_date")],
+                      [ai.types.InlineKeyboardButton(text="Выполнено!", callback_data="task_complit"),
+                       ai.types.InlineKeyboardButton(text="Удалить", callback_data="delete_task")],
+                       [ai.types.InlineKeyboardButton(text="Отменить", callback_data="отменить")]]
 )
