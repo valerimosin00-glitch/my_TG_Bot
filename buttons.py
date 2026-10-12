@@ -91,3 +91,19 @@ keyboard_task_actions = ai.types.InlineKeyboardMarkup(
                        ai.types.InlineKeyboardButton(text="Удалить", callback_data="delete_task")],
                        [ai.types.InlineKeyboardButton(text="Отменить", callback_data="отменить")]]
 )
+
+# Инлайн клавиатура для задач без времени
+keyboard_task_no_time = ai.types.InlineKeyboardMarkup(
+    inline_keyboard= [[ai.types.InlineKeyboardButton(text="Просмотр задач", callback_data="no_time_show_task")],
+                [ai.types.InlineKeyboardButton(text="Добавить новую задачу", callback_data="no_time_add_task")],
+                [ai.types.InlineKeyboardButton(text="Просмотр выполненных задач", callback_data="no_time_show_task_compl")]]
+)
+
+
+# Кнопки с действиями над задачами без даты
+keyboard_task_actions_no_time = ai.types.InlineKeyboardMarkup(
+    inline_keyboard=[[ai.types.InlineKeyboardButton(text="Редактировать задачу", callback_data="no_time_update_task"),
+                      ai.types.InlineKeyboardButton(text="Выполнено!", callback_data="no_time_task_complit")],
+                       [ai.types.InlineKeyboardButton(text="Удалить", callback_data="no_time_delete_task"),
+                       ai.types.InlineKeyboardButton(text="Отменить", callback_data="отменить")]]
+)

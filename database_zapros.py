@@ -142,3 +142,89 @@ def show_tasks_complit(user_id):
     return result
 
 
+"""
+    CREATE TABLE plans(
+    plan_id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    task TEXT,
+    status TEXT DEFAUT 0,
+    created_at TEXT,
+    comleted_at TEXT)"""
+
+def show_task_no_time(user_id):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor() 
+
+    result = cur.execute("""
+        SELECT plan_id, task
+        FROM plans
+        WHERE user_id = ? and status = 0
+        ORDER BY created_at DESC""", (user_id,))    
+
+    result = result.fetchall()
+    conn.close()
+    return result
+
+def no_time_add_tasks(user_id, task):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor()
+    date_creat = str(datetime.now().strftime("%Y-%m-%d %H:%M"))
+
+    cur.execute("""
+        INSERT INTO plans (user_id, task, created_at)
+        VALUES (?,?,?)
+        """, ((user_id, task, date_creat)))
+
+    conn.commit()
+    conn.close()
+
+def show_task_complit_no_time(user_id):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor()
+    result = cur.execute("""
+        SELECT plan_id, task
+        FROM plans
+        WHERE user_id = ? and status = 1
+        ORDER BY created_at DESC""", (user_id,))    
+
+    result = result.fetchall()
+    conn.close()
+    return result
+
+
+def update_status_task_no_time(plan_id):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor() 
+
+    date = datetime.today()
+    date = str(date.date())
+
+    cur.execute("""
+        UPDATE plans
+        SET status = 1, completed_at = ?
+        WHERE plan_id = ?""", (date,plan_id))
+
+    conn.commit()
+    conn.close()    
+
+def delete_task_no_time(plan_id):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor() 
+
+    cur.execute("""
+        DELETE FROM plans
+        WHERE plan_id = ?""", (plan_id,))
+
+    conn.commit()
+    conn.close()  
+
+def update_text_task_no_time(task, plan_id):
+    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    cur = conn.cursor()    
+
+    cur.execute("""
+        UPDATE plans
+        SET task = ?
+        WHERE plan_id = ?""", (task, plan_id))
+    conn.commit()
+    conn.close()
