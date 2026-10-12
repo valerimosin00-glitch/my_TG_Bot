@@ -1,12 +1,13 @@
 from datetime import datetime, time, timedelta
 import sqlite3
+from pathlib import Path
 
-
+DB_PATH = Path(__file__).resolve().parent / "bot.db"
 
 
 # функция по выдаче данных 
 def show_task_date(user_id, date):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor()
 
     date_now = datetime.today()
@@ -23,11 +24,14 @@ def show_task_date(user_id, date):
         day = 8 - date_now.isoweekday()
         date_stop = datetime.combine((date_now + timedelta(days=day)), time(0,0))
 
+    date_start = date_start.strftime("%Y-%m-%d %H:%M")
+    date_stop = date_stop.strftime("%Y-%m-%d %H:%M")
+
     result = cur.execute("""
         SELECT task_id, task, due_datetime
         FROM tasks
         WHERE user_id=? and status=0 and due_datetime >= ? and due_datetime < ?
-        ORDER BY due_datetime""", ((user_id, date_start, date_stop)))
+        ORDER BY due_datetime""", (user_id, date_start, date_stop))
 
     result = result.fetchall()
 
@@ -35,7 +39,7 @@ def show_task_date(user_id, date):
     return result
 
 def show_task_custom_date(user_id, date_start, date_stop):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor()
 
     result = cur.execute("""
@@ -61,14 +65,14 @@ def show_task_custom_date(user_id, date_start, date_stop):
     completed_at TEXT)"""
 
 def add_tasks(user_id, task, due_datetime, created_at):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor()
 
 
     cur.execute("""
         INSERT INTO tasks (user_id, task, due_datetime, created_at)
         VALUES (?,?,?,?)
-        """, ((user_id, task, due_datetime, created_at)))
+        """, (user_id, task, due_datetime, created_at))
 
     conn.commit()
     conn.close()
@@ -77,7 +81,7 @@ def add_tasks(user_id, task, due_datetime, created_at):
 
 
 def update_text_task(task, task_id):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor()    
 
     cur.execute("""
@@ -88,7 +92,7 @@ def update_text_task(task, task_id):
     conn.close()
     
 def update_date_task(task_id, date):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor() 
 
     cur.execute("""
@@ -100,7 +104,7 @@ def update_date_task(task_id, date):
     conn.close()    
 
 def update_status_task(task_id):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor() 
 
     date = datetime.today()
@@ -116,7 +120,7 @@ def update_status_task(task_id):
 
 
 def delete_task(task_id):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor() 
 
     cur.execute("""
@@ -128,7 +132,7 @@ def delete_task(task_id):
 
 
 def show_tasks_complit(user_id):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor() 
 
     result = cur.execute("""
@@ -152,7 +156,7 @@ def show_tasks_complit(user_id):
     comleted_at TEXT)"""
 
 def show_task_no_time(user_id):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor() 
 
     result = cur.execute("""
@@ -166,7 +170,7 @@ def show_task_no_time(user_id):
     return result
 
 def no_time_add_tasks(user_id, task):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor()
     date_creat = str(datetime.now().strftime("%Y-%m-%d %H:%M"))
 
@@ -179,7 +183,7 @@ def no_time_add_tasks(user_id, task):
     conn.close()
 
 def show_task_complit_no_time(user_id):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor()
     result = cur.execute("""
         SELECT plan_id, task
@@ -193,7 +197,7 @@ def show_task_complit_no_time(user_id):
 
 
 def update_status_task_no_time(plan_id):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor() 
 
     date = datetime.today()
@@ -208,7 +212,7 @@ def update_status_task_no_time(plan_id):
     conn.close()    
 
 def delete_task_no_time(plan_id):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor() 
 
     cur.execute("""
@@ -219,7 +223,7 @@ def delete_task_no_time(plan_id):
     conn.close()  
 
 def update_text_task_no_time(task, plan_id):
-    conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+    conn = sqlite3.connect(DB_PATH) 
     cur = conn.cursor()    
 
     cur.execute("""

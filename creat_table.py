@@ -1,28 +1,33 @@
 import sqlite3
+from pathlib import Path
 
-conn = sqlite3.connect(r"C:\Users\LENOVO\Desktop\програмирование\Telegrem_Bot\Bot_Finish\bot.db") 
+DB_PATH = Path(__file__).resolve().parent / "bot.db"
+
+conn = sqlite3.connect(DB_PATH) 
 
 cur = conn.cursor()
 
 
 cur.execute("""
-    CREATE TABLE tasks(
+    CREATE TABLE IF NOT EXISTS tasks(
     task_id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL,
     task TEXT,
     due_datetime TEXT,
-    status TEXT DEFAULT 0,
+    status INTEGER DEFAULT 0,
     postponed_count INTEGER DEFAULT 0,
-    created_at TEXT)""")
+    created_at TEXT,
+    completed_at TEXT)""")
 
 
 cur.execute("""
-    CREATE TABLE plans(
+    CREATE TABLE IF NOT EXISTS plans(
     plan_id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL,
     task TEXT,
-    status TEXT,
-    created_at TEXT)""")
+    status INTEGER DEFAULT 0,
+    created_at TEXT,
+    completed_at TEXT)""")
 
 conn.commit()
 conn.close()
