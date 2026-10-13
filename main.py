@@ -6,6 +6,7 @@ from hendlers.hendlers_task_to_time import router as tasks_router
 from hendlers.hendlers_add_task import router as add_tasks_router
 from hendlers.hendlers_task_actions import router as task_actions_router
 from hendlers.hendlers_task_no_time import router as task_no_time_router
+import creat_table
 
 load_dotenv()
 
