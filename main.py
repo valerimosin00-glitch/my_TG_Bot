@@ -6,7 +6,7 @@ from hendlers.hendlers_task_to_time import router as tasks_router
 from hendlers.hendlers_add_task import router as add_tasks_router
 from hendlers.hendlers_task_actions import router as task_actions_router
 from hendlers.hendlers_task_no_time import router as task_no_time_router
-import creat_table
+from creat_table import creat_table
 
 load_dotenv()
 
@@ -22,6 +22,7 @@ dp.include_router(task_actions_router)
 dp.include_router(task_no_time_router)
 
 async def main():
+    creat_table()
     bot = ai.Bot(token=TOKEN)
     await dp.start_polling(bot)
 

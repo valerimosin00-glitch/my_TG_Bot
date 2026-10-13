@@ -5,10 +5,12 @@ DB_PATH = Path(__file__).resolve().parent / "bot.db"
 
 conn = sqlite3.connect(DB_PATH) 
 
-cur = conn.cursor()
 
 
-cur.execute("""
+def creat_table():
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS tasks(
     task_id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL,
@@ -20,7 +22,7 @@ cur.execute("""
     completed_at TEXT)""")
 
 
-cur.execute("""
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS plans(
     plan_id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL,
@@ -29,5 +31,5 @@ cur.execute("""
     created_at TEXT,
     completed_at TEXT)""")
 
-conn.commit()
-conn.close()
+    conn.commit()
+    conn.close()
