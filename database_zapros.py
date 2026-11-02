@@ -4,6 +4,30 @@ from pathlib import Path
 
 DB_PATH = Path(__file__).resolve().parent / "bot.db"
 
+# Функция для получения всех ID 
+def get_tasks_for_notifications():
+    conn = sqlite3.connect(DB_PATH) 
+    cur = conn.cursor()
+    today = datetime.today()
+    dt_now = today.strftime("%Y-%m-%d %H:%M")
+    dt_in_advance = (today + timedelta(minutes=30)).strftime("%Y-%m-%d %H:%M")
+    result = cur.execute("""
+        SELECT user_id, task, due_datetime
+        FROM tasks
+        WHERE due_datetime = ? OR due_datetime = ? AND status = 0""", (dt_now, dt_in_advance))
+
+    result = result.fetchall()
+    start = []
+    before = []
+    for i in result:
+        if dt_now == i[-1]:
+            start.append(i)
+        else:
+            before.append(i)
+    result_finall = {"start": start,"before":before }
+
+    conn.close()
+    return result_finall
 
 # функция по выдаче данных 
 def show_task_date(user_id, date):
@@ -232,3 +256,64 @@ def update_text_task_no_time(task, plan_id):
         WHERE plan_id = ?""", (task, plan_id))
     conn.commit()
     conn.close()
+
+
+"""
+    CREATE TABLE IF NOT EXISTS expense(
+    expense_id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    amount REAL,
+    category TEXT ,
+    expense_date TEXT,
+    description TEXT)"""
+
+# Функция для добавления расхода
+def add_expence(user_id, amount, category, expense_date,description ):
+    conn = sqlite3.connect(DB_PATH) 
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO expense (user_id, amount, category, expense_date,description)
+        VALUES (?,?,?,?,?)
+        """, (user_id, amount, category, expense_date,description))
+
+    conn.commit()
+    conn.close()
+
+# Функция для просмотра расходов за период времени
+def show_expence_two_date(user_id, date_start, date_stop):
+    conn = sqlite3.connect(DB_PATH) 
+    cur = conn.cursor()
+
+    result = cur.execute("""
+        SELECT expense_id, amount, category, expense_date, description
+        FROM expense
+        WHERE user_id=? and expense_date >= ? and expense_date <= ?
+        ORDER BY expense_date""", (user_id, date_start, date_stop))
+
+    result = result.fetchall()
+    result_finall = ""
+    for i in result:
+        result_finall = result_finall + f" ID:{i[0]}, {i[1]} {i[2]} {i[3]} {i[4]} \n" 
+
+    conn.close()
+    return result_finall    
+
+# Функция просмотра расходов зв 1 день
+def show_expence_one_date(user_id, date):
+    conn = sqlite3.connect(DB_PATH) 
+    cur = conn.cursor()
+
+    result = cur.execute("""
+        SELECT expense_id, amount, category, expense_date, description
+        FROM expense
+        WHERE user_id=? and expense_date = ?
+        ORDER BY expense_date""", (user_id, date))
+
+    result = result.fetchall()
+    result_finall = ""
+    for i in result:
+        result_finall = result_finall + f" ID:{i[0]}, {i[1]} {i[2]} {i[3]} {i[4]} \n" 
+
+    conn.close()
+    return result_finall 

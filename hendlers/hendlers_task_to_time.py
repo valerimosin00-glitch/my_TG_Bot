@@ -18,12 +18,6 @@ async def start(message: ai.types.Message):
     await message.answer("Привет! Выбери действие:", reply_markup=keyboard_start)
 
 
-# Временная заглушка для ветки расходов, потом будет перенесена в отдельный файл и доработана
-@router.message(ai.F.text == "Расходы")
-async def expenses(message: ai.types.Message):
-    await message.answer("Скоро появится") 
-
-
 # главный обработчик задач
 @router.message(ai.F.text == "Задачи")
 async def tasks(message: ai.types.Message):

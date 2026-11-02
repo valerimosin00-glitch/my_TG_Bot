@@ -104,10 +104,14 @@ async def update_task_text(message: ai.types.Message, state: FSMContext):
 async def wait_new_time(callback: ai.types.CallbackQuery, state:FSMContext):
     await callback.answer()
 
-    await state.update_data(date = callback.data)
-    await callback.message.edit_reply_markup(reply_markup=None)
-    await state.set_state(UpdateDate.waiting_time)
-    await callback.message.answer("Теперь выберите время", reply_markup= keyboard_time)
+    if callback.data == "custom_date":
+        await callback.message.answer("Введите дату в формате '2026-11-25'")
+        await state.set_state(UpdateDate.waiting_time)
+    else:
+        await state.update_data(date = callback.data)
+        await callback.message.edit_reply_markup(reply_markup=None)
+        await state.set_state(UpdateDate.waiting_time)
+        await callback.message.answer("Теперь выберите время", reply_markup= keyboard_time)
 
 # финальный хендлер получает время и выполняет запрос в бд
 @router.callback_query(UpdateDate.waiting_time)
@@ -133,3 +137,25 @@ async def update_time(callback:ai.types.CallbackQuery, state: FSMContext):
         user_id,date_start, date_stop = option_user_show_task[callback.from_user.id]
         del option_user_show_task[user_id]
         await shows_task_variant2(user_id,date_start,date_stop,callback.message)      
+
+@router.message(UpdateDate.waiting_time)
+async def update_time(message: ai.types.Message, state: FSMContext):
+
+    data = await state.get_data()
+    task_id = data["id"]
+    datetime = message.text
+
+
+    update_date_task(task_id, datetime)
+
+    await state.clear()
+    await message.answer("Задача перенесена")
+
+    if len(option_user_show_task[message.from_user.id]) == 2:
+        user_id,date = option_user_show_task[message.from_user.id]
+        del option_user_show_task[user_id]
+        await shows_task_variant1(user_id,date,message)
+    else:
+        user_id,date_start, date_stop = option_user_show_task[message.from_user.id]
+        del option_user_show_task[user_id]
+        await shows_task_variant2(user_id,date_start,date_stop,message)      

@@ -107,3 +107,41 @@ keyboard_task_actions_no_time = ai.types.InlineKeyboardMarkup(
                        [ai.types.InlineKeyboardButton(text="Удалить", callback_data="no_time_delete_task"),
                        ai.types.InlineKeyboardButton(text="Отменить", callback_data="отменить")]]
 )
+
+# Кнопки для хендлера с расходами
+keyboard_expence = ai.types.InlineKeyboardMarkup(
+    inline_keyboard=[[ai.types.InlineKeyboardButton(text="Добавить", callback_data="add_expence")],
+    [ai.types.InlineKeyboardButton(text="Просмотреть", callback_data="show_expence")]]
+)
+
+# Кнопки добавления расходов
+keyboard_choose_add_expence = ai.types.InlineKeyboardMarkup(
+    inline_keyboard=[[ai.types.InlineKeyboardButton(text="Сегодня", callback_data="today_add"),
+                      ai.types.InlineKeyboardButton(text="Вчера", callback_data="yesterday_add")],
+                      [ai.types.InlineKeyboardButton(text="Другая дата", callback_data="customs_date_add"),
+                       ai.types.InlineKeyboardButton(text="Отменить", callback_data="отменить")]]
+)
+
+# Кнопки категорий
+keyboard_category = ai.types.InlineKeyboardMarkup(
+    inline_keyboard=[[ai.types.InlineKeyboardButton(text="Еда", callback_data="food"),
+                       ai.types.InlineKeyboardButton(text="Вкусняшки", callback_data="tasty_treats")],
+                       [ai.types.InlineKeyboardButton(text="Здоровье", callback_data="health"),
+                       ai.types.InlineKeyboardButton(text="Коммуналка и жильё", callback_data="housing")],
+                       [ai.types.InlineKeyboardButton(text="Уход за телом", callback_data="body_care"),
+                      ai.types.InlineKeyboardButton(text="Транспорт", callback_data="bus_and_car")],
+                      [ai.types.InlineKeyboardButton(text="Развлечения", callback_data="entertainment"),
+                        ai.types.InlineKeyboardButton(text="Другое", callback_data="other")],
+                       [ai.types.InlineKeyboardButton(text="Отменить", callback_data="отменить")]]
+)
+
+# Кнопки для просмотра расходов
+keyboard_show_expence = ai.types.InlineKeyboardMarkup(
+    inline_keyboard=[[ai.types.InlineKeyboardButton(text="Сегодня", callback_data="expence_show_today"),
+                      ai.types.InlineKeyboardButton(text="За эту неделю", callback_data="expence_show_this_week")],
+                      [ai.types.InlineKeyboardButton(text="За неделю",callback_data="expence_show_week"),
+                       ai.types.InlineKeyboardButton(text="За этот месяц", callback_data="expence_show_this_month")],
+                       [ai.types.InlineKeyboardButton(text="За месяц", callback_data="expence_show_month"),
+                        ai.types.InlineKeyboardButton(text="За другой период", callback_data="show_custom_date")],
+                       [ai.types.InlineKeyboardButton(text="Отменить", callback_data="отменить")]]
+)

@@ -31,5 +31,14 @@ def creat_table():
     created_at TEXT,
     completed_at TEXT)""")
 
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS expense(
+    expense_id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    amount REAL,
+    category TEXT ,
+    expense_date TEXT,
+    description TEXT)""")
+
     conn.commit()
     conn.close()
